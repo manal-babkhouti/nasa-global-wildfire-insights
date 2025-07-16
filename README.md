@@ -61,11 +61,3 @@ git clone https://github.com/manal-babkhouti/nasa-global-wildfire-insights.git
 cd nasa-global-wildfire-insights
 pip install -r requirements.txt
 jupyter notebook NASA_FIRMS_Wildfire_Analysis.ipynb
-
-
-
-## 📘 Read the Full Report
-
-👉 The complete report (with visuals, interpretations, and deep analysis) is available here:  
-📄 [View the Full PDF Report](https://github.com/manal-babkhouti/nasa-global-wildfire-insights/raw/main/NASA_FIRMS_Global_Wildfire_Insights_Report.pdf)  
-This is the full write-up explaining the project's context, methods, results, and key insights.
