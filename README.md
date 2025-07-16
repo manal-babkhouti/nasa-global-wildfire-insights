@@ -62,6 +62,8 @@ cd nasa-global-wildfire-insights
 pip install -r requirements.txt
 jupyter notebook NASA_FIRMS_Wildfire_Analysis.ipynb
 
+---
+
 ## 📘 Read the Full Report
 
 👉 The complete report (with visuals, interpretations, and deep analysis) is available here:  
