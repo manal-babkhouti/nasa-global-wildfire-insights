@@ -1,7 +1,6 @@
 # 🔥 NASA Global Wildfire Insights
 
-End-to-end data science on NASA FIRMS (2024): from EDA and classification to a new **weekly spatio-temporal forecasting** layer that predicts short-term fire activity on a simple lat/lon grid.
-
+This project presents a comprehensive data science analysis of global wildfire activity during 2024 using satellite data from NASA’s FIRMS (Fire Information for Resource Management System). It combines geospatial exploration, classification modeling, and unsupervised learning to understand when, where, and how fires occur — and whether satellite data can predict or uncover hidden patterns.
 
 ---
 
@@ -35,38 +34,34 @@ End-to-end data science on NASA FIRMS (2024): from EDA and classification to a n
 
 ---
 
-## ✨ What’s new (Forecasting layer)
+## 📎 Files Included
 
-We added a full forecasting pipeline that:
-
-- Aggregates point detections → **weekly counts per 0.25° lat/lon bin**
-- Builds time-series features: **lags** (1 week), **rolling sums** (4 weeks), **weekly seasonality** (sin/cos)
-- Compares models:
-  - **ARIMA(2,1,2)** baseline on the global weekly series (train/test split aligned to Mondays)
-  - **Prophet** (weekly seasonality)
-  - **XGBoost** on spatio-temporal features (per-cell), then **sum over cells** for global curves
-  - **Bias correction** (remove mean error on validation), and a **log-target variant** (+ optional bias)
-- Reconciles global scale: **match XGB totals to ARIMA trend** for consistent totals
-- Evaluates with **MAE / RMSE / SMAPE** + saves a **metrics table** and **Parquet forecasts**
----
-### 📘 The forecasting notebook
-
-- Reads raw FIRMS CSV and builds `data/processed/firms_weekly.parquet`
-- Engineers features (`lag1`, `lag4_sum`, `w_sin`, `w_cos`)
-- Splits **80% train / 20% test** by week (time-aware); inside train keeps last **10%** for validation
-- Trains **ARIMA**, **Prophet**, **XGBoost** (+ tuned and **log-target** variants)
-- Applies **bias correction** and (optional) **ARIMA reconciliation**
-- Plots **global curves** (sum over cells) and writes:
-  - model metrics → `data/processed/metrics.csv`
-  - forecast curves → `data/processed/forecast_*.parquet`
+- `NASA_FIRMS_Wildfire_Analysis.ipynb` — Full notebook with EDA, modeling & clustering.
+- `NASA_FIRMS_Global_Wildfire_Insights_Report.pdf` — A detailed LaTeX report (with figures and commentary).
+- `requirements.txt` — List of Python dependencies for easy setup.
 
 ---
 
-### 📈 What the Results Show
+## 🧠 Why This Project Matters
 
-- **ARIMA:** smooth short-term baseline; residual diagnostics included (QQ/ACF/Ljung–Box).
-- **Prophet:** captures weekly seasonality but trended down for late season in this dataset.
-- **XGBoost:**
-  - Strong on **RMSE** after simple **bias correction**.
-  - **Log-target** training can improve **MAE** but may over-predict (explicit bias term shown).
-  - Feature importance confirms seasonality + recent lags are most useful.
+This project demonstrates the ability to:
+- Handle large-scale satellite data with real-world relevance.
+- Combine supervised and unsupervised techniques.
+- Interpret ML results in context, with rigorous evaluation.
+- Communicate findings clearly in a professional data science report.
+
+---
+
+## 📥 How to Use
+
+Clone the repo, install the requirements, and open the notebook:
+
+```bash
+git clone https://github.com/manal-babkhouti/nasa-global-wildfire-insights.git
+cd nasa-global-wildfire-insights
+pip install -r requirements.txt
+jupyter notebook NASA_FIRMS_Wildfire_Analysis.ipynb
+
+## Read the Full Report
+
+👉 A complete project write-up (with visuals, interpretations, and insights) is provided in the [`NASA_FIRMS_Global_Wildfire_Insights_Report.pdf`](NASA_FIRMS_Global_Wildfire_Insights_Report.pdf).
