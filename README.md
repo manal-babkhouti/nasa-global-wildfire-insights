@@ -35,39 +35,35 @@ This project presents a comprehensive data science analysis of global wildfire a
 
 ## 🔮 Weekly Forecasting Layer (new)
 
-A **weekly spatio-temporal forecasting** pipeline on a simple 0.25° lat/lon grid was added.
+We added a **weekly spatio-temporal forecasting** pipeline on a simple 0.25° lat/lon grid.
 
 ### Data & Features
-- Aggregate FIRMS points → **weekly counts per 0.25° bin** (anchored to Mondays).
-- Engineer time features per cell:
+- Aggregate FIRMS points → **weekly counts per 0.25° bin** (anchored to Mondays)
+- Per-cell features:
   - `lag1` (last week)
   - `lag4_sum` (sum of prior 4 weeks)
-  - weekly seasonality via `w_sin`, `w_cos`.
+  - weekly seasonality via `w_sin`, `w_cos`
 
-### Train/Validation/Test
-- **Time-aware split:** first **80% weeks = train**, last **20% = test**.
-- Inside train, keep the last **10%** of weeks as a validation slice for model selection/tuning.
+### Train / Validation / Test
+- **Time-aware split:** first **80%** of weeks = **train**, last **20%** = **test**
+- Within train, the last **10%** of weeks = **validation** for tuning/bias checks
 
 ### Models Compared
-- **Baselines:** Naïve (copy last week), Moving Average (4 weeks).
-- **ARIMA(2,1,2)** on the **global weekly series** (with residual diagnostics: Q-Q, ACF, Ljung–Box).
-- **Prophet** with weekly seasonality.
-- **XGBoost** on the per-cell features; predictions are summed to global for comparison.
-- **Bias correction:** add back mean validation residual when a model is consistently high/low.
-- **Log-target variant:** train on `log1p(count)` and back-transform to stabilize peaks.
-- **(Optional) Reconciliation:** keep XGB’s spatial breakdown but **scale weekly totals** to match ARIMA’s global forecast (top-down consistency).
+- **Baselines:** `Naïve` (copy last week), `MA(4)` (4-week moving average)
+- **ARIMA(2,1,2)** on the **global** weekly series (diagnostics: Q–Q, ACF, Ljung–Box)
+- **Prophet** with weekly seasonality
+- **XGBoost** on per-cell features; predictions summed to global for comparison
+- **Bias correction:** add mean validation residual to de-bias forecasts
+- **Log-target:** train on `log1p(count)` and back-transform to calm peaks
+- **(Optional) Reconciliation:** keep XGB spatial detail but **scale weekly totals** to match ARIMA’s global forecast
 
 ### Evaluation & Outputs
-- Metrics: **MAE**, **RMSE**, **SMAPE** (reported per-cell and on global sums).
-- Plots: global test curve vs. model forecasts; feature importance for XGBoost.
-- Artifacts (written on run) under `data/processed/`:
+- Metrics: **MAE**, **RMSE**, **SMAPE** (per-cell and global sums)
+- Plots: global test curve vs. forecasts; XGBoost feature importance
+- Artifacts (written under `data/processed/`):
   - `firms_weekly.parquet`
   - `metrics.csv` (per-model scores)
-  - `forecast_*.parquet` (global curves; model-specific)
+  - `forecast_*.parquet` (global curves per model)
   - *(optional)* reconciled per-cell/global forecasts
 
-> **Result snapshot (typical run):** ARIMA is a strong, stable **global** baseline; Prophet under-forecasts late season; **XGBoost + simple bias correction** performs best on RMSE for the per-cell task, and **reconciling XGB to ARIMA totals** yields globally consistent forecasts while keeping spatial detail. See the notebook’s final tables/plots and `metrics.csv` for your exact numbers.
-
----
-
-
+> **Result snapshot (typical run):** ARIMA is a strong, stable **global** baseline; Prophet tends to under-forecast late season; **XGBoost + simple bias correction** performs best on RMSE at the per-cell level, and **reconciling XGB to ARIMA totals** yields globally consistent forecasts while keeping spatial detail. See the notebook’s final tables/plots and `metrics.csv` for exact numbers.
