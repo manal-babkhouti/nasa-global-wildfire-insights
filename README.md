@@ -35,7 +35,7 @@ This project presents a comprehensive data science analysis of global wildfire a
 
 ## 🔮 Weekly Forecasting Layer (new)
 
-We add a full **weekly spatio-temporal forecasting** pipeline on a simple 0.25° lat/lon grid.
+A **weekly spatio-temporal forecasting** pipeline on a simple 0.25° lat/lon grid was added.
 
 ### Data & Features
 - Aggregate FIRMS points → **weekly counts per 0.25° bin** (anchored to Mondays).
@@ -69,4 +69,5 @@ We add a full **weekly spatio-temporal forecasting** pipeline on a simple 0.25°
 > **Result snapshot (typical run):** ARIMA is a strong, stable **global** baseline; Prophet under-forecasts late season; **XGBoost + simple bias correction** performs best on RMSE for the per-cell task, and **reconciling XGB to ARIMA totals** yields globally consistent forecasts while keeping spatial detail. See the notebook’s final tables/plots and `metrics.csv` for your exact numbers.
 
 ---
+
 
